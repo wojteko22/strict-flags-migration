@@ -27,6 +27,6 @@ module.exports.getImportsForFile = function getImportsForFile(file, srcRoot) {
             if (fs.existsSync(`${fileName}.d.ts`)) {
                 return `${fileName}.d.ts`;
             }
-            throw new Error(`Unresolved import ${fileName} in ${file}`);
-        });
+            return undefined;
+        }).filter(fileName => fileName !== undefined);
 };

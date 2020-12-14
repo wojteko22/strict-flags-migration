@@ -10,7 +10,7 @@ const config = require('./config');
  */
 const forEachFileInSrc = (srcRoot, options) => {
     return new Promise((resolve, reject) => {
-        glob(`${srcRoot}/vs/**/*.ts`, (err, files) => {
+        glob(`${srcRoot}/**/*.ts`, (err, files) => {
             if (err) {
                 return reject(err);
             }

@@ -32,8 +32,7 @@ function tryAutoAddStrictNulls(child, tsconfigPath, file) {
         // Config on accept
         const newConfig = Object.assign({}, originalConifg);
         newConfig.files = Array.from(new Set(originalConifg.files.concat('./' + relativeFilePath).sort()));
-
-        fs.writeFileSync(tsconfigPath, JSON.stringify(newConfig, null, '\t'));
+        writeFile(tsconfigPath, newConfig);
 
         const listener = (data) => {
             const textOut = data.toString();
@@ -42,11 +41,11 @@ function tryAutoAddStrictNulls(child, tsconfigPath, file) {
                 const errorCount = +match[1];
                 if (errorCount === 0) {
                     console.log(`👍`);
-                    fs.writeFileSync(tsconfigPath, JSON.stringify(newConfig, null, '\t'));
+                    writeFile(tsconfigPath, newConfig);
                 }
                 else {
                     console.log(`💥 - ${errorCount}`);
-                    fs.writeFileSync(tsconfigPath, JSON.stringify(originalConifg, null, '\t'));
+                    writeFile(tsconfigPath, originalConifg);
                 }
                 resolve();
                 child.stdout.removeListener('data', listener);
@@ -54,4 +53,8 @@ function tryAutoAddStrictNulls(child, tsconfigPath, file) {
         };
         child.stdout.on('data', listener);
     });
+}
+
+function writeFile(tsconfigPath, config) {
+    fs.writeFileSync(tsconfigPath, JSON.stringify(config, null, 2) + '\n');
 }
